@@ -1,0 +1,46 @@
+[
+    {
+        "id": 1,
+        "title": "Samsung Galaxy S23",
+        "description": "20MP, 512GB, 8 RAM",
+        "code": "SGS23",
+        "price": 800,
+        "status": true,
+        "stock": 10,
+        "category": "celular",
+        "thumbnails": [""]
+    },
+    {
+        "id": 2,
+        "title": "iPhone 14",
+        "description": "12MP, 512GB, 8 RAM",
+        "code": "IP14",
+        "price": 1000,
+        "status": true,
+        "stock": 3,
+        "category": "celular",
+        "thumbnails": [""]
+    },
+    {
+        "id": 3,
+        "title": "Google Pixel 7",
+        "description": "12MP, 128GB, 8 RAM",
+        "code": "GP7",
+        "price": 700,
+        "status": true,
+        "stock": 10,
+        "category": "celular",
+        "thumbnails": [""]
+    },
+    {
+        "id": 4,
+        "title": "Xiaomi Mi 13",
+        "description": "12MP, 128GB, 4 RAM",
+        "code": "XM13",
+        "price": 600,
+        "status": true,
+        "stock": 20,
+        "category": "celular",
+        "thumbnails": [""]
+    }
+]
