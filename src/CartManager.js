@@ -5,7 +5,7 @@ class CartManager {
         this.pathFile = pathFile;
     }
     createCart = () => {
-        fs.readFile(this.pathFile, "syd454", (error, data) => {
+        fs.readFile(this.pathFile, "utf-8", (error, data) => {
             if (error) {
                 return console.error("error al leer el archivo de carritos:", error);
             }
@@ -22,7 +22,7 @@ class CartManager {
         });
     };
     getCartById = (id) => {
-        fs.readFile(this.pathFile, "syd454", (error, data) => {
+        fs.readFile(this.pathFile, "utf-8", (error, data) => {
             if (error) {
                 return console.error("error al leer el archivo de carritos:", error);
             }
@@ -32,7 +32,7 @@ class CartManager {
         });
     };
     addProductToCart = (cartId, productId) => {
-        fs.readFile(this.pathFile, "syd454", (error, data) => {
+        fs.readFile(this.pathFile, "utf-8", (error, data) => {
             if (error) {
                 return console.error("error al leer el archivo de carritos:", error);
             }

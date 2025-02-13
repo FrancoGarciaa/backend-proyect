@@ -1,29 +1,83 @@
+import express from "express";
+import ProductManager from "./ProductManager.js";
+import CartManager from "./CartManager.js";
+import usersRouter from "../routes/users.router.js";
+
 const app = express();
 
+const productManager = new ProductManager("productos.json");
+const cartManager = new CartManager("carritos.json");
+
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/celulares", (req, res) => {
-res.status(200).send(celulares);
-})
+const productsRouter = express.Router();
 
-app.get("/celulares", (req, res) => {
-    fs.readFile('productos.json', 'utf8', (err, data) => {
-        if (err) {
-            return res.status(500).send('Error al leer el archivo de productos');
-        }
-        const productos = JSON.parse(data);
-        res.status(200).send(productos);
-    });
+productsRouter.get("/", async (req, res) => {
+    const limit = req.query.limit;
+    const products = await productManager.getProducts(limit);
+    res.json(products);
 });
 
-app.get("/celulares/:pid", (req, res) => {
-    const pid = parseInt(req.params.pid); 
-    const celular = celulares.find(modelo => modelo.id === pid); 
-
-    if (celular) {
-        res.status(200).send(celular); 
+productsRouter.get("/:pid", async (req, res) => {
+    const product = await productManager.getProductById(req.params.pid);
+    if (product) {
+        res.json(product);
     } else {
-        res.status(404).send({ message: 'Celular no encontrado' });
+        res.status(404).json({ message: "Producto no encontrado" });
     }
+});
+
+productsRouter.post("/", (req, res) => {
+    const { title, description, code, price, stock, category, thumbnails } = req.body;
+    const newProduct = {
+        title,
+        description,
+        code,
+        price,
+        stock,
+        category,
+        thumbnails,
+        status: true
+    };
+    productManager.addProduct(newProduct);
+    res.status(201).json({ message: "Producto agregado correctamente" });
+});
+
+productsRouter.put("/:pid", (req, res) => {
+    const updatedProduct = req.body;
+    productManager.updateProduct(req.params.pid, updatedProduct);
+    res.json({ message: "Producto actualizado correctamente" });
+});
+
+productsRouter.delete("/:pid", (req, res) => {
+    productManager.deleteProduct(req.params.pid);
+    res.json({ message: "Producto eliminado correctamente" });
+});
+
+const cartsRouter = express.Router();
+
+cartsRouter.post("/", (req, res) => {
+    cartManager.createCart();
+    res.status(201).json({ message: "Carrito creado correctamente" });
+});
+
+cartsRouter.get("/:cid", (req, res) => {
+    const products = cartManager.getCartById(req.params.cid);
+    res.json(products);
+});
+
+cartsRouter.post("/:cid/product/:pid", (req, res) => {
+    cartManager.addProductToCart(req.params.cid, req.params.pid);
+    res.json({ message: "Producto agregado al carrito" });
+});
+
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartsRouter);
+app.use("/api/users", usersRouter);
+
+
+
+app.listen(8080, () => {
+    console.log("Servidor corriendo en el puerto 8080");
 });

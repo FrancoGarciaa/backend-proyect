@@ -10,9 +10,9 @@ usersRouter.get("/", (req,res)=> {
 
 usersRouter.post("/",(req, res) => {
     const { email, password } = req.body;
-    if( !email || !password) return res.status(400).send({ message: "Error" })
+    if( !email || !password) return res.status(400).send({ message: "Error al recuperar los datos del usuario" })
 
-        users.push({ email,password })
+        users.push({ email, password })
         res.status(201).send(users)
 })
 
