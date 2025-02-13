@@ -8,18 +8,18 @@
         "status": true,
         "stock": 10,
         "category": "celular",
-        "thumbnails": [""]
+        "thumbnails": ["./public/img/s23.jpg"]
     },
     {
         "id": 2,
-        "title": "iPhone 14",
+        "title": "iPhone 15 pro max",
         "description": "12MP, 512GB, 8 RAM",
         "code": "IP14",
         "price": 1000,
         "status": true,
         "stock": 3,
         "category": "celular",
-        "thumbnails": [""]
+        "thumbnails": ["./public/img/iphone15.png"]
     },
     {
         "id": 3,
@@ -30,17 +30,17 @@
         "status": true,
         "stock": 10,
         "category": "celular",
-        "thumbnails": [""]
+        "thumbnails": ["./public/img/pixel7.jpg"]
     },
     {
         "id": 4,
-        "title": "Xiaomi Mi 13",
+        "title": "Motorola e23",
         "description": "12MP, 128GB, 4 RAM",
-        "code": "XM13",
-        "price": 600,
+        "code": "MT23",
+        "price": 200,
         "status": true,
         "stock": 20,
         "category": "celular",
-        "thumbnails": [""]
+        "thumbnails": ["./public/img/e23.png"]
     }
 ]

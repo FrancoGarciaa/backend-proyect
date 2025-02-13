@@ -8,10 +8,10 @@ class ProductManager {
     async getProducts(limit) {
         try {
             const data = await fs.readFile(this.pathFile, "utf-8");
-            let productos = JSON.parse(data);
-            return limit ? productos.slice(0, limit) : productos;
+            let celulares = JSON.parse(data);
+            return limit ? celulares.slice(0, limit) : celulares;
         } catch (error) {
-            console.error("Error al leer el archivo de productos:", error);
+            console.error("Error al leer el archivo de celulares:", error);
             return [];
         }
     }
@@ -19,10 +19,10 @@ class ProductManager {
     async getProductById(id) {
         try {
             const data = await fs.readFile(this.pathFile, "utf-8");
-            const productos = JSON.parse(data);
-            return productos.find(p => p.id == id) || null;
+            const celulares = JSON.parse(data);
+            return celulares.find(p => p.id == id) || null;
         } catch (error) {
-            console.error("Error al leer el archivo de productos:", error);
+            console.error("Error al leer el archivo de celulares:", error);
             return null;
         }
     }
@@ -30,18 +30,18 @@ class ProductManager {
     async addProduct(product) {
         try {
             const data = await fs.readFile(this.pathFile, "utf-8");
-            let productos = JSON.parse(data);
+            let celulares = JSON.parse(data);
 
-            const newId = productos.length > 0 ? productos[productos.length - 1].id + 1 : 1;
+            const newId = celulares.length > 0 ? celulares[celulares.length - 1].id + 1 : 1;
             product.id = newId;
 
-            productos.push(product);
-            await fs.writeFile(this.pathFile, JSON.stringify(productos, null, 2));
+            celulares.push(product);
+            await fs.writeFile(this.pathFile, JSON.stringify(celulares, null, 2));
 
-            console.log("Producto agregado correctamente");
+            console.log("celular agregado correctamente");
             return product;
         } catch (error) {
-            console.error("Error al agregar el producto:", error);
+            console.error("Error al agregar el celular:", error);
             return null;
         }
     }
@@ -49,40 +49,40 @@ class ProductManager {
     async updateProduct(id, updatedProduct) {
         try {
             const data = await fs.readFile(this.pathFile, "utf-8");
-            let productos = JSON.parse(data);
+            let celulares = JSON.parse(data);
 
-            let index = productos.findIndex(p => p.id == id);
+            let index = celulares.findIndex(p => p.id == id);
             if (index !== -1) {
-                productos[index] = { ...productos[index], ...updatedProduct };
-                await fs.writeFile(this.pathFile, JSON.stringify(productos, null, 2));
-                console.log("Producto actualizado correctamente");
+                celulares[index] = { ...celulares[index], ...updatedProduct };
+                await fs.writeFile(this.pathFile, JSON.stringify(celulares, null, 2));
+                console.log("celular actualizado correctamente");
                 return true;
             } else {
-                console.log("Producto no encontrado");
+                console.log("celular no encontrado");
                 return false;
             }
         } catch (error) {
-            console.error("Error al actualizar el producto:", error);
+            console.error("Error al actualizar el celular:", error);
             return false;
         }
     }
-    
+
     async deleteProduct(id) {
         try {
             const data = await fs.readFile(this.pathFile, "utf-8");
-            let productos = JSON.parse(data);
+            let celulares = JSON.parse(data);
 
-            const filteredProducts = productos.filter(p => p.id != id);
-            if (filteredProducts.length === productos.length) {
-                console.log("Producto no encontrado");
+            const filteredProducts = celulares.filter(p => p.id != id);
+            if (filteredProducts.length === celulares.length) {
+                console.log("celular no encontrado");
                 return false;
             }
 
             await fs.writeFile(this.pathFile, JSON.stringify(filteredProducts, null, 2));
-            console.log("Producto eliminado correctamente");
+            console.log("celular eliminado correctamente");
             return true;
         } catch (error) {
-            console.error("Error al eliminar el producto:", error);
+            console.error("Error al eliminar el celular:", error);
             return false;
         }
     }

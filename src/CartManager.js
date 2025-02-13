@@ -47,9 +47,9 @@ class CartManager {
                 }
                 fs.writeFile(this.pathFile, JSON.stringify(carritos, null, 2), (error) => {
                     if (error) {
-                        return console.error("error al agregar el producto al carrito:", error);
+                        return console.error("error al agregar el celular al carrito:", error);
                     }
-                    console.log("Producto agregado al carrito");
+                    console.log("celular agregado al carrito");
                 });
             } else {
                 console.log("Carrito no encontrado");

@@ -10,6 +10,7 @@ const cartManager = new CartManager("carritos.json");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 const productsRouter = express.Router();
 
@@ -24,7 +25,7 @@ productsRouter.get("/:pid", async (req, res) => {
     if (product) {
         res.json(product);
     } else {
-        res.status(404).json({ message: "Producto no encontrado" });
+        res.status(404).json({ message: "Celular no encontrado" });
     }
 });
 
@@ -41,18 +42,18 @@ productsRouter.post("/", (req, res) => {
         status: true
     };
     productManager.addProduct(newProduct);
-    res.status(201).json({ message: "Producto agregado correctamente" });
+    res.status(201).json({ message: "Celular agregado correctamente" });
 });
 
 productsRouter.put("/:pid", (req, res) => {
     const updatedProduct = req.body;
     productManager.updateProduct(req.params.pid, updatedProduct);
-    res.json({ message: "Producto actualizado correctamente" });
+    res.json({ message: "Celular actualizado correctamente" });
 });
 
 productsRouter.delete("/:pid", (req, res) => {
     productManager.deleteProduct(req.params.pid);
-    res.json({ message: "Producto eliminado correctamente" });
+    res.json({ message: "Celular eliminado correctamente" });
 });
 
 const cartsRouter = express.Router();
@@ -69,7 +70,7 @@ cartsRouter.get("/:cid", (req, res) => {
 
 cartsRouter.post("/:cid/product/:pid", (req, res) => {
     cartManager.addProductToCart(req.params.cid, req.params.pid);
-    res.json({ message: "Producto agregado al carrito" });
+    res.json({ message: "Celular agregado al carrito" });
 });
 
 app.use("/api/products", productsRouter);
