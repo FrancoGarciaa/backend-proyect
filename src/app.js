@@ -1,9 +1,13 @@
 import express from "express";
 import ProductManager from "./ProductManager.js";
 import CartManager from "./CartManager.js";
-import usersRouter from "../routes/users.router.js";
+import usersRouter from "./routes/views.router.js";
 
 const app = express();
+
+
+app.set("view engine", "handlebars")
+app.set("views", "./src/views")
 
 const productManager = new ProductManager("productos.json");
 const cartManager = new CartManager("carritos.json");
