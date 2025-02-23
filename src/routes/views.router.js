@@ -1,19 +1,28 @@
 import express from "express";
+import ProductManager from "../ProductManager.js";
 
-const usersRouter = express.Router();
+const viewsRouter = express.Router();
+const productManager = new ProductManager("./src/data/products.json");
 
-const users = [];
+viewsRouter.get("/", async (req, res) => {
+    try {
 
-usersRouter.get("/", (req,res)=> {
-    res.status(200).send(users);
-})
+        const products = await productManager.getProducts();
 
-usersRouter.post("/",(req, res) => {
-    const { email, password } = req.body;
-    if( !email || !password) return res.status(400).send({ message: "Error al recuperar los datos del usuario" })
+        res.render("home", { products });
+    } catch (error) {
+        res.status(500).send ({ message: error.message });
+    }
+});
 
-        users.push({ email, password })
-        res.status(201).send(users)
-})
+viewsRouter.get("/realtimeproducts", async (req, res)=> {
+    try {
+        const products = await productManager.getProducts();
+        res.render("realTimeProducts", { products });
+    } catch (error) {
+        res.status(500).send ({ message: error.message });
+    }
 
-export default usersRouter;
+});
+
+export default viewsRouter;

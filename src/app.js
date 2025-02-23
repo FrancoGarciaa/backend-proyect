@@ -1,16 +1,23 @@
 import express from "express";
 import ProductManager from "./ProductManager.js";
 import CartManager from "./CartManager.js";
-import usersRouter from "./routes/views.router.js";
+import { engine } from "express-handlebars";
+import { Server } from "socket.io";
+import http from "http";
+import viewsRouter from "./routes/views.router.js";
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server)
 
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", "./src/views");
 
-app.set("view engine", "handlebars")
-app.set("views", "./src/views")
+const productManager = new ProductManager("./src/data/products.json");
+const cartManager = new CartManager("./src/data/cart.json");
 
-const productManager = new ProductManager("productos.json");
-const cartManager = new CartManager("carritos.json");
+const PORT = 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -79,10 +86,26 @@ cartsRouter.post("/:cid/product/:pid", (req, res) => {
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
-app.use("/api/users", usersRouter);
+app.use("/", viewsRouter);
+app.use("/realtimeproducts", viewsRouter);
+
+io.on("connection", (socket)=> {
+    console.log("Nuevo usuario conectado");
+
+    socket.on("newProduct", async (productData)=>{
+
+        try {
+            
+            const newProduct = await productManager.addProduct(productData);
+            io.emit("productAdded", newProduct);
+
+        } catch (error) {
+            console.log("Error añadiendo el nuevo celular")
+        }
 
 
-
-app.listen(8080, () => {
-    console.log("Servidor corriendo en el puerto 8080");
+    });
 });
+
+
+server.listen(PORT, ()=> console.log(`El servidor en: http://localhost:${PORT} ha iniciado correctamente`) );
