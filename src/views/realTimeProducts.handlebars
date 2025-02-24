@@ -12,12 +12,20 @@
     <button type="submit">Enviar informacion</button>
 </form>
 
-        <h2>Lista de productos</h2>
-    <ul id="productsList">
-        {{#each products}}
-            <li> {{this.title}} - {{this.price}} </li>
-        {{/each}}
-    </ul>
+<h2>Lista de productos</h2>
+<ul id="productsList">
+    {{#each products}}
+        <li> 
+            {{#if this.title}} 
+                {{this.title}} - {{this.price}} 
+            {{else}}
+                (Producto sin título) - {{this.price}}
+            {{/if}} 
+            <button onclick="deleteProduct({{this.id}})">Eliminar</button>
+        </li>
+    {{/each}}
+</ul>
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/index.js"></script>
+

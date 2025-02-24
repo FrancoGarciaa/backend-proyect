@@ -5,13 +5,12 @@ class ProductManager {
         this.pathFile = pathFile;
     }
 
-    async getProducts(limit) {
+    async getProducts() {
         try {
             const data = await fs.readFile(this.pathFile, "utf-8");
-            let celulares = JSON.parse(data);
-            return limit ? celulares.slice(0, limit) : celulares;
+            return JSON.parse(data);
         } catch (error) {
-            console.error("Error al leer el archivo de celulares:", error);
+            console.error("Error al leer los productos:", error);
             return [];
         }
     }
@@ -69,20 +68,17 @@ class ProductManager {
 
     async deleteProduct(id) {
         try {
-            const data = await fs.readFile(this.pathFile, "utf-8");
-            let celulares = JSON.parse(data);
-
-            const filteredProducts = celulares.filter(p => p.id != id);
-            if (filteredProducts.length === celulares.length) {
-                console.log("celular no encontrado");
+            const products = await this.getProducts();
+            const newProducts = products.filter(product => product.id != id);
+            if (newProducts.length === products.length) {
+                console.log(`Producto con ID ${id} no encontrado.`);
                 return false;
             }
-
-            await fs.writeFile(this.pathFile, JSON.stringify(filteredProducts, null, 2));
-            console.log("celular eliminado correctamente");
+            await fs.writeFile(this.pathFile, JSON.stringify(newProducts, null, 2));
+            console.log(`Producto con ID ${id} eliminado correctamente.`);
             return true;
         } catch (error) {
-            console.error("Error al eliminar el celular:", error);
+            console.error("Error al eliminar el producto:", error);
             return false;
         }
     }

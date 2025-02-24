@@ -8,7 +8,7 @@ import viewsRouter from "./routes/views.router.js";
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server)
+const io = new Server(server);
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
@@ -89,21 +89,27 @@ app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/realtimeproducts", viewsRouter);
 
-io.on("connection", (socket)=> {
+io.on("connection", (socket) => {
     console.log("Nuevo usuario conectado");
 
-    socket.on("newProduct", async (productData)=>{
-
+    socket.on("newProduct", async (productData) => {
         try {
-            
             const newProduct = await productManager.addProduct(productData);
             io.emit("productAdded", newProduct);
-
         } catch (error) {
-            console.log("Error añadiendo el nuevo celular")
+            console.log("Error añadiendo el nuevo celular:", error);
         }
+    });
 
-
+    socket.on("deleteProduct", async (productId) => {
+        try {
+            const success = await productManager.deleteProduct(productId);
+            if (success) {
+                io.emit("productDeleted", productId);
+            }
+        } catch (error) {
+            console.log("Error eliminando el celular:", error);
+        }
     });
 });
 
