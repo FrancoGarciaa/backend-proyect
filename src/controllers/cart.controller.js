@@ -27,8 +27,15 @@ export const getCartById = async (req, res) => {
 export const addProductToCart = async (req, res) => {
     try {
         const { cid, pid } = req.params;
-        const { quantity } = req.body;
-        const updatedCart = await cartManager.addProductToCart(cid, pid, quantity);
+
+        if (!mongoose.Types.ObjectId.isValid(cid)) {
+            return res.status(400).json({ status: "error", message: "ID de carrito no válido" });
+        }
+        if (!mongoose.Types.ObjectId.isValid(pid)) {
+            return res.status(400).json({ status: "error", message: "ID de producto no válido" });
+        }
+
+        const updatedCart = await cartManager.addProductToCart(cid, pid);
         res.json({ status: "success", payload: updatedCart });
     } catch (error) {
         res.status(500).json({ status: "error", message: error.message });

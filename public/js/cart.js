@@ -16,6 +16,25 @@ const deleteProduct = (productId) => {
     socket.emit("deleteProduct", productId);
 };
 
+async function removeFromCart(productId) {
+    const cartId = localStorage.getItem("cartId") || "defaultCartId";
+    try {
+        const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
+        });
+        const data = await response.json();
+        if (data.status === "success") {
+            alert("Producto eliminado del carrito");
+            location.reload();
+        } else {
+            alert("Error al eliminar el producto");
+        }
+    } catch (error) {
+        console.error("Error al eliminar del carrito:", error);
+    }
+}
+
 socket.on("productAdded", (product) => {
     alert(`Nuevo producto agregado: ${product.name}`);
     location.reload();

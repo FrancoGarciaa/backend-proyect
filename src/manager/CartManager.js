@@ -2,35 +2,31 @@ import { Cart } from "../models/cart.model.js";
 import mongoose from "mongoose";
 
 class CartManager {
-    async createCart() {
-        try {
-            const newCart = new Cart({ products: [] });
-            await newCart.save();
-            console.log("Carrito creado correctamente");
-            return newCart;
-        } catch (error) {
-            console.error("Error al crear el carrito:", error);
-        }
-    }
-
     async getCartById(id) {
         try {
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                console.error("ID de carrito no válido");
+                return null;
+            }
+
             const cart = await Cart.findById(id).populate("products.product");
-            return cart ? cart.products : [];
+            return cart ? cart : null;
         } catch (error) {
             console.error("Error al obtener el carrito:", error);
             return null;
-        }
+        } 
     }
 
     async addProductToCart(cartId, productId) {
-
-
         try {
-            const cart = await Cart.findById(cartId);
-            console.log("Carrito encontrado:", cart);
+            if (!mongoose.Types.ObjectId.isValid(cartId) || !mongoose.Types.ObjectId.isValid(productId)) {
+                console.error("ID no válido");
+                return null;
+            }
+    
+            let cart = await Cart.findById(cartId);
             if (!cart) {
-                console.log("Carrito no encontrado");
+                console.error("Carrito no encontrado");
                 return null;
             }
     
@@ -42,11 +38,24 @@ class CartManager {
             }
     
             await cart.save();
-            console.log("Producto agregado al carrito");
             return cart;
         } catch (error) {
-            console.error("Error al agregar el producto al carrito:", error);
-            return null; 
+            console.error("Error al agregar producto al carrito:", error);
+            return null;
+        }
+    }
+
+    async deleteProductFromCart(cartId, productId) {
+        try {
+            const cart = await Cart.findById(cartId);
+            if (!cart) return null;
+
+            cart.products = cart.products.filter(p => !p.product.equals(productId));
+            await cart.save();
+            return cart;
+        } catch (error) {
+            console.error("Error al eliminar producto del carrito:", error);
+            return null;
         }
     }
 }

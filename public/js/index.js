@@ -36,31 +36,20 @@ if (!localStorage.getItem("cartId")) {
 }
 
 async function addToCart(productId) {
+    const cartId = localStorage.getItem("cartId") || "defaultCartId";
     try {
-        const cartId = localStorage.getItem("cartId");
-
-        if (!cartId) {
-            alert("No hay carrito activo. Por favor, recarga la página o crea un carrito.");
-            return;
-        }
-
-        console.log("Cart ID obtenido:", cartId);
-
         const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
+            headers: { "Content-Type": "application/json" }
         });
-
-        if (response.ok) {
+        const data = await response.json();
+        if (data.status === "success") {
             alert("Producto agregado al carrito");
         } else {
-            const errorData = await response.json();
-            alert(`Error: ${errorData.message || "No se pudo agregar el producto"}`);
+            alert("Error al agregar el producto");
         }
     } catch (error) {
-        console.error("Error al agregar producto al carrito:", error);
+        console.error("Error al agregar al carrito:", error);
     }
 }
 

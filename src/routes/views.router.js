@@ -1,41 +1,46 @@
 import express from "express";
-import ProductManager from "../manager/ProductManager.js";
-
+import ProductManager from "../manager/ProductManager.js"; // Asegúrate de importar ProductManager
+import CartManager from "../manager/CartManager.js"; // Importa CartManager
 
 const viewsRouter = express.Router();
 const productManager = new ProductManager();
+const cartManager = new CartManager();
 
 viewsRouter.get("/", async (req, res) => {
     try {
         const { page = 1, limit = 12 } = req.query;
         const result = await productManager.getProducts({ page, limit });
 
-        if (result.status === "success") {
-            res.render("home", { 
-                products: result.payload,
-                hasPrevPage: result.hasPrevPage,
-                hasNextPage: result.hasNextPage,
-                prevPage: result.prevPage,
-                nextPage: result.nextPage,
-                currentPage: result.page
-            });
-        } else {
-            res.render("home", { products: [] });
-        }
+        res.render("home", {
+            products: result.payload,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            currentPage: result.page
+        });
     } catch (error) {
-        res.status(500).send({ message: error.message });
+        console.error("Error al obtener productos:", error);
+        res.status(500).send({ message: "Error al cargar los productos" });
     }
 });
 
-
-viewsRouter.get("/realtimeproducts", async (req, res) => {
+viewsRouter.get("/cart", async (req, res) => {
     try {
-        const products = await productManager.getProducts();
-        res.render("realtimeproducts", { products: products.payload });
+        const cartId = "defaultCartId"; 
+        const cart = await cartManager.getCartById(cartId);
+
+        if (!cart) {
+            return res.render("cart", { cart: { products: [] } });
+        }
+
+        res.render("cart", { cart });
     } catch (error) {
-        console.error("Error al obtener productos para la vista:", error);
-        res.status(500).send("Error al cargar los productos");
+        console.error("Error al obtener el carrito:", error);
+        res.status(500).send("Error al cargar el carrito");
     }
 });
+
+
 
 export default viewsRouter;

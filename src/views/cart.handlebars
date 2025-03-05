@@ -1,0 +1,25 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link rel="stylesheet" href="/css/cart.css">
+</head>
+<body>
+    <h1>Carrito de Compras</h1>
+    <button onclick="window.location.href='/'">Regresar a la Tienda</button>
+    <div id="cartList">
+        {{#each cart.products}}
+            <div class="product-card">
+                <h2>{{this.product.name}}</h2>
+                <p>{{this.product.description}}</p>
+                <p>Precio: ${{this.product.price}}</p>
+                <p>Cantidad: {{this.quantity}}</p>
+                <button onclick="removeFromCart('{{this.product._id}}')">Eliminar</button>
+            </div>
+        {{/each}}
+    </div>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/cart.js"></script>
+</body>
