@@ -27,7 +27,7 @@ connectDB();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.static("./src/public"));
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
@@ -62,4 +62,4 @@ io.on("connection", (socket) => {
 });
 
 
-server.listen(PORT, () => console.log(`🚀 Servidor corriendo en: http://localhost:${PORT}`));
+server.listen(PORT, () => console.log(`Servidor corriendo en: http://localhost:${PORT}`));

@@ -35,6 +35,7 @@ class CartManager {
 
     async addProductToCart(cartId, productId) {
 
+
         try {
             const cart = await Cart.findById(cartId);
             console.log("Carrito encontrado:", cart);

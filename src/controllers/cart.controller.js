@@ -4,10 +4,10 @@ const cartManager = new CartManager();
 
 export const createCart = async (req, res) => {
     try {
-        const newCart = await cartManager.createCart();
-        res.status(201).json({ status: "success", payload: newCart });
+        const cart = await cartManager.createCart();
+        res.status(201).json(cart);
     } catch (error) {
-        res.status(500).json({ status: "error", message: error.message });
+        res.status(500).json({ message: "Error al crear el carrito", error });
     }
 };
 
