@@ -7,12 +7,26 @@ const productManager = new ProductManager();
 
 viewsRouter.get("/", async (req, res) => {
     try {
-        const products = await productManager.getProducts();
-        res.render("home", { products });
+        const { page = 1, limit = 10 } = req.query;
+        const result = await productManager.getProducts({ page, limit });
+
+        if (result.status === "success") {
+            res.render("home", { 
+                products: result.payload,
+                hasPrevPage: result.hasPrevPage,
+                hasNextPage: result.hasNextPage,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                currentPage: result.page
+            });
+        } else {
+            res.render("home", { products: [] });
+        }
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
 });
+
 
 viewsRouter.get("/realtimeproducts", (req, res) => {
     try {

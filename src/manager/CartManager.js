@@ -34,26 +34,28 @@ class CartManager {
     }
 
     async addProductToCart(cartId, productId) {
+
         try {
             const cart = await Cart.findById(cartId);
+            console.log("Carrito encontrado:", cart);
             if (!cart) {
                 console.log("Carrito no encontrado");
                 return null;
             }
-            
+    
             const existingProduct = cart.products.find(p => p.product.equals(productId));
             if (existingProduct) {
                 existingProduct.quantity += 1;
             } else {
                 cart.products.push({ product: productId, quantity: 1 });
             }
-            
+    
             await cart.save();
-            console.log("Celular agregado al carrito");
+            console.log("Producto agregado al carrito");
             return cart;
         } catch (error) {
-            console.error("Error al agregar el celular al carrito:", error);
-            return null;
+            console.error("Error al agregar el producto al carrito:", error);
+            return null; 
         }
     }
 }

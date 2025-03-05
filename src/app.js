@@ -38,14 +38,16 @@ io.on("connection", (socket) => {
 
     socket.on("newProduct", async (productData) => {
         console.log("Datos recibidos para crear producto:", productData);
-
+    
         try {
-            const newProduct = await productManager.createProduct(productData); 
-            io.emit("productAdded", newProduct);
+            const newProduct = await productManager.createProduct(productData);
+            const updatedProducts = await productManager.getProducts();
+            io.emit("updateProducts", updatedProducts);
         } catch (error) {
             console.log("Error añadiendo el nuevo celular:", error);
         }
     });
+    
 
     socket.on("deleteProduct", async (productId) => {
         try {

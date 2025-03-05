@@ -17,7 +17,7 @@ class ProductManager {
     const queryFilter = query ? { title: { $regex: query, $options: "i" } } : {};
 
     try {
-      const result = await Product.paginate(queryFilter, options);
+      const result = await Product.paginate(queryFilter, { ...options, lean: true });
       const { totalProducts, products, totalPages, page, prevPage, nextPage, hasPrevPage, hasNextPage } = result;
 
       return {

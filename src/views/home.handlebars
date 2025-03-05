@@ -7,19 +7,31 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <h1>Tienda de Celulares</h1>
-    <div class="product-list">
-        {{#each products}}
-            <div class="product-card">
-                <h2>{{this.name}}</h2>
-                <p>{{this.description}}</p>
-                <p>Precio: ${{this.price}}</p>
-                <p>Stock: {{this.stock}}</p>
-                <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
-            </div>
-        {{/each}}
+<h1>Tienda de Celulares</h1>
+<div class="product-list">
+    {{#each products}}
+        <div class="product-card">
+            <h2>{{this.name}}</h2>
+            <p>{{this.description}}</p>
+            <p>Precio: ${{this.price}}</p>
+            <p>Stock: {{this.stock}}</p>
+            <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
+        </div>
+    {{/each}}
+</div>
+
+    <div class="pagination">
+        {{#if hasPrevPage}}
+            <a href="/?page={{prevPage}}" class="btn">Anterior</a>
+        {{/if}}
+        <span>Página {{currentPage}}</span>
+        {{#if hasNextPage}}
+            <a href="/?page={{nextPage}}" class="btn">Siguiente</a>
+        {{/if}}
     </div>
 
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/js/index.js"></script>
+
 </body>
 </html> 
