@@ -25,3 +25,12 @@ socket.on("productDeleted", (productId) => {
     alert("Producto eliminado correctamente");
     location.reload();
 });
+
+socket.on("updateProducts", (updatedProducts) => {
+    const productList = document.getElementById("productList");
+    productList.innerHTML = "";
+
+    updatedProducts.forEach((product) => {
+        addProductToList(product);
+    });
+});

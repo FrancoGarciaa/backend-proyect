@@ -3,7 +3,7 @@ import { Product } from "../models/product.model.js";
 class ProductManager {
   constructor() {}
 
-  async getProducts({ limit = 10, page = 1, sort, query } = {}) {
+  async getProducts({ limit = 12, page = 1, sort, query } = {}) {
     const options = {
       page: parseInt(page),
       limit: parseInt(limit),

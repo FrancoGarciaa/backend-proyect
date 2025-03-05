@@ -7,7 +7,7 @@ const productManager = new ProductManager();
 
 viewsRouter.get("/", async (req, res) => {
     try {
-        const { page = 1, limit = 10 } = req.query;
+        const { page = 1, limit = 12 } = req.query;
         const result = await productManager.getProducts({ page, limit });
 
         if (result.status === "success") {
@@ -28,11 +28,13 @@ viewsRouter.get("/", async (req, res) => {
 });
 
 
-viewsRouter.get("/realtimeproducts", (req, res) => {
+viewsRouter.get("/realtimeproducts", async (req, res) => {
     try {
-        res.render("realTimeProducts");
+        const products = await productManager.getProducts();
+        res.render("realtimeproducts", { products: products.payload });
     } catch (error) {
-        res.status(500).send({ message: error.message });
+        console.error("Error al obtener productos para la vista:", error);
+        res.status(500).send("Error al cargar los productos");
     }
 });
 

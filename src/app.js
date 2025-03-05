@@ -27,7 +27,7 @@ connectDB();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("./src/public"));
+app.use(express.static('public'));
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);

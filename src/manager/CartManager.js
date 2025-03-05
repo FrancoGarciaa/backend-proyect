@@ -1,15 +1,5 @@
+import { Cart } from "../models/cart.model.js";
 import mongoose from "mongoose";
-
-const cartSchema = new mongoose.Schema({
-    products: [
-        {
-            product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
-            quantity: { type: Number, default: 1 }
-        }
-    ]
-});
-
-const Cart = mongoose.model("Cart", cartSchema);
 
 class CartManager {
     async createCart() {
