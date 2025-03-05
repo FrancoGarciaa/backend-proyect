@@ -1,31 +1,34 @@
-<div>
-    <h1>Real Time Products</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real time products</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Productos</h1>
+    <form id="productForm">
+        <input type="text" id="name" placeholder="Nombre del producto" required>
+        <input type="text" id="description" placeholder="Descripción" required>
+        <input type="number" id="price" placeholder="Precio" required>
+        <input type="number" id="stock" placeholder="Stock" required>
+        <button type="submit">Agregar Producto</button>
+    </form>
 
-<h2>Agregar nuevo producto</h2>
-<form id="formNewProduct">
-    <input type="text" name="title" placeholder="Ingrese el titulo" id="">
-    <input type="text" name="description" placeholder="Ingrese la descripcion" id="">
-    <input type="text" name="code" placeholder="Ingrese el codigo" id="">
-    <input type="number" name="price" placeholder="Ingrese el precio" id="">
-    <input type="number" name="stock" placeholder="Ingrese el stock" id="">
-    <input type="text" name="category" placeholder="Ingrese la categoria" id="">
-    <button type="submit">Enviar informacion</button>
-</form>
+    <div id="productList">
+        {{#each products}}
+            <div class="product-card">
+                <h2>{{this.name}}</h2>
+                <p>{{this.description}}</p>
+                <p>Precio: ${{this.price}}</p>
+                <p>Stock: {{this.stock}}</p>
+                <button onclick="deleteProduct('{{this._id}}')">Eliminar</button>
+            </div>
+        {{/each}}
+    </div>
 
-<h2>Lista de productos</h2>
-<ul id="productsList">
-    {{#each products}}
-        <li> 
-            {{#if this.title}} 
-                {{this.title}} - {{this.price}} 
-            {{else}}
-                (Producto sin título) - {{this.price}}
-            {{/if}} 
-            <button onclick="deleteProduct({{this.id}})">Eliminar</button>
-        </li>
-    {{/each}}
-</ul>
-</div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
-
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/realtime.js"></script>
+</body>
+</html>

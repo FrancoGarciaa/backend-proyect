@@ -1,9 +1,25 @@
-<div>
-    <h1>Home</h1>
-    <h2>Lista de productos</h2>
-    <ul>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce de celulares</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Tienda de Celulares</h1>
+    <div class="product-list">
         {{#each products}}
-            <li> {{this.title}} - {{this.price}} </li>
+            <div class="product-card">
+                <h2>{{this.name}}</h2>
+                <p>{{this.description}}</p>
+                <p>Precio: ${{this.price}}</p>
+                <p>Stock: {{this.stock}}</p>
+                <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
+            </div>
         {{/each}}
-    </ul>
-</div>
+    </div>
+
+    <script src="/js/index.js"></script>
+</body>
+</html> 

@@ -20,7 +20,7 @@
         "stock": 3,
         "category": "celular",
         "thumbnails": ["./public/img/iphone15.png"]
-    },
+    }, 
     {
         "id": 3,
         "title": "Google Pixel 7",
