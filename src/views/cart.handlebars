@@ -6,20 +6,21 @@
     <link rel="stylesheet" href="/css/cart.css">
 </head>
 <body>
-    <h1>Carrito de Compras</h1>
-    <button onclick="window.location.href='/'">Regresar a la Tienda</button>
     <div id="cartList">
         {{#each cart.products}}
-            <div class="product-card">
+            <div class="product-card" id="product-{{this.product._id}}">
                 <h2>{{this.product.name}}</h2>
                 <p>{{this.product.description}}</p>
                 <p>Precio: ${{this.product.price}}</p>
                 <p>Cantidad: {{this.quantity}}</p>
                 <button onclick="removeFromCart('{{this.product._id}}')">Eliminar</button>
             </div>
+        {{else}}
+            <p>No hay productos en el carrito.</p>
         {{/each}}
     </div>
-    
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/cart.js"></script>
 </body>
+</html>

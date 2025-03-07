@@ -19,30 +19,37 @@ async function createCart() {
     try {
         const response = await fetch('/api/carts', { method: 'POST' });
         const data = await response.json();
+
         if (data && data._id) {
             localStorage.setItem("cartId", data._id);
-            alert("Carrito creado correctamente");
+            console.log("Carrito creado correctamente:", data._id);
+            return data._id; // Retornar el ID del carrito creado
         } else {
-            alert("No se pudo crear el carrito");
+            console.error("Error: No se pudo obtener un ID de carrito válido");
+            return null;
         }
     } catch (error) {
         console.error("Error al crear carrito:", error);
+        return null;
     }
 }
 
-if (!localStorage.getItem("cartId")) {
-    console.log("No hay carrito en localStorage. Creando uno nuevo...");
-    createCart();
-}
 
 async function addToCart(productId) {
-    const cartId = localStorage.getItem("cartId") || "defaultCartId";
+    const cartId = await ensureCartExists(); 
+
+    if (!cartId) {
+        alert("No se encontró un carrito válido. Intenta recargar la página.");
+        return;
+    }
+
     try {
         const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" }
         });
         const data = await response.json();
+
         if (data.status === "success") {
             alert("Producto agregado al carrito");
         } else {

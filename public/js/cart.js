@@ -42,8 +42,12 @@ socket.on("productAdded", (product) => {
 
 socket.on("productDeleted", (productId) => {
     alert("Producto eliminado correctamente");
-    location.reload();
+    const productCard = document.querySelector(`#product-${productId}`);
+    if (productCard) {
+        productCard.remove();
+    }
 });
+
 
 socket.on("updateProducts", (updatedProducts) => {
     const productList = document.getElementById("productList");

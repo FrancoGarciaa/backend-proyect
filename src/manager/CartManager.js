@@ -1,42 +1,57 @@
-import { Cart } from "../models/cart.model.js";
 import mongoose from "mongoose";
+import Cart from "../models/cart.model.js";
 
 class CartManager {
-    async getCartById(id) {
+    async createCart() {
         try {
-            if (!mongoose.Types.ObjectId.isValid(id)) {
-                console.error("ID de carrito no válido");
+            const newCart = new Cart({ products: [] });
+            await newCart.save(); 
+            return newCart;
+        } catch (error) {
+            console.error("Error al crear el carrito:", error);
+            return null;
+        }
+    }
+
+    async getCartById(cartId) {
+        try {
+            if (!mongoose.Types.ObjectId.isValid(cartId)) {
+                console.log("ID de carrito inválido");
                 return null;
             }
 
-            const cart = await Cart.findById(id).populate("products.product");
-            return cart ? cart : null;
+            const cart = await Cart.findById(cartId).populate("products.product");
+            if (!cart) {
+                console.log(`Carrito con ID ${cartId} no encontrado.`);
+                return null;
+            }
+            return cart;
         } catch (error) {
             console.error("Error al obtener el carrito:", error);
             return null;
-        } 
+        }
     }
 
     async addProductToCart(cartId, productId) {
         try {
             if (!mongoose.Types.ObjectId.isValid(cartId) || !mongoose.Types.ObjectId.isValid(productId)) {
-                console.error("ID no válido");
+                console.log("ID de carrito o producto inválido");
                 return null;
             }
-    
-            let cart = await Cart.findById(cartId);
+
+            const cart = await Cart.findById(cartId);
             if (!cart) {
-                console.error("Carrito no encontrado");
+                console.log("Carrito no encontrado");
                 return null;
             }
-    
-            const existingProduct = cart.products.find(p => p.product.equals(productId));
-            if (existingProduct) {
-                existingProduct.quantity += 1;
+
+            const productIndex = cart.products.findIndex(p => p.product.toString() === productId);
+            if (productIndex !== -1) {
+                cart.products[productIndex].quantity += 1;
             } else {
                 cart.products.push({ product: productId, quantity: 1 });
             }
-    
+
             await cart.save();
             return cart;
         } catch (error) {
@@ -47,8 +62,16 @@ class CartManager {
 
     async deleteProductFromCart(cartId, productId) {
         try {
+            if (!mongoose.Types.ObjectId.isValid(cartId) || !mongoose.Types.ObjectId.isValid(productId)) {
+                console.log("ID de carrito o producto inválido");
+                return null;
+            }
+
             const cart = await Cart.findById(cartId);
-            if (!cart) return null;
+            if (!cart) {
+                console.log("Carrito no encontrado");
+                return null;
+            }
 
             cart.products = cart.products.filter(p => !p.product.equals(productId));
             await cart.save();
